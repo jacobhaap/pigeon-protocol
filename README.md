@@ -1,93 +1,53 @@
-# Pigeon
+# Pigeon Protocol
 
+> Pigeon Protocol for end-to-end encryption.
 
+The **Pigeon Protocol** is an end-to-end encryption protocol that combines Elliptic-curve Diffie–Hellman (ECDH) key exchange and symmetric key encryption, utilizing Curve25519, AES-256-GCM, and HKDF-SHA256 as cryptographic primitives.
 
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+*To get started, install the library:*
+```bash
+npm install pigeon-protocol
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/jacobhaap/pigeon.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/jacobhaap/pigeon/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Identity
+A new identity can be created or an existing identity regenerated with the `new` or `regenerate` methods of `identity`, and are both asynchronous. An identity consists of a mnemonic phrase, and public & private key pair. When using the `.regenerate` method, a mnemonic phrase is provided to reobtain the associated key pair. The mnemonic phrase can be used in place of the private key for encryption and decryption.
+```js
+const { identity } =  require('pigeon-protocol');
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+// Create a new identity
+identity.new();
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+// Regenerate an identity from a mnemonic phrase
+identity.regenerate(mnemonic);
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Encryption & Decryption
+Encryption and decryption are based on the `encrypt` and `decrypt` functions, both asynchronous. These functions are based on the expectation of a sender to single recipient, both requiring a private key and a public key. The `encrypt` function, expects that an *input* be provided (the input to encrypt) along with a *private key* (the sender) and a *public key* (the recipient), and returns an encryption prepared for transport as a string. The `decrypt` function, expects that an *encrypted input* be provided, along with a *private key* (the recipient) and a *public key* (the sender). The sender can also decrypt their own encryption based on their private key and the public key of the recipient.
+```js
+const { encrypt, decrypt } =  require('pigeon-protocol');
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+// For encryption
+encrypt(input, privateKey, publicKey)
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+// For decryption
+decrypt(encryptedInput, publicKey, privateKey);
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## The Protocol
 
-## License
-For open source projects, say how it is licensed.
+### Key Derivation
+The basis of key derivation is on the use of mnemonic phrases for generating deterministic key pairs. Under this method of key derivation, 15-word mnemonic phrases are obtained based on [BIP39 using the English wordlist](https://www.npmjs.com/package/@iacobus/bip39) with an initial entropy length of 160 bits. Entropy is generated internally with the `.randomBytes()` method of [Node.js Crypto](https://nodejs.org/api/crypto.html#crypto).
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+To derive the private key from the mnemonic phrase, the **PBKDF2** ([Password-Based Key Derivation Function 2](https://nodejs.org/api/crypto.html#cryptopbkdf2syncpassword-salt-iterations-keylen-digest)) synchronous key derivation function is used, supplying the mnemonic phrase (in UTF-8 NFKD) as the password, and a SHA256 hash of the password as a salt. The iterations count is set to 210000 based on the  [OWASP recommendations](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2) for **PBKDF2-HMAC-SHA512**. The length of the derived private key is 64 bytes, and HMAC-SHA512 is used as the pseudo-random function. This method of private key derivation is based in part on BIP39 *[From mnemonic to seed](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#from-mnemonic-to-seed)*.
+
+A **Curve25519** public key is derived from the 64 byte private key based on the first 32 bytes taken as a private scalar based on [X25519](https://www.npmjs.com/package/@noble/curves#ed25519-x25519-ristretto255), using `x25519.getPublicKey()`. The resulting public key is returned in hexadecimal with `0x` prefixed.
+
+### Encryption & Decryption
+A Curve25519 shared secret is derived from private scalar and a public key based on X25519 using `x25519.scalarMult()`. This shared secret is then used to derive a symmetric key based on the synchronous [HKDF key derivation function](https://nodejs.org/api/crypto.html#cryptohkdfsyncdigest-ikm-salt-info-keylen), with a SHA256 digest, and salt of 16 random bytes, for a key length of 32 bytes.
+
+Cyphertext is obtained based on a provided input and a symmetric key as the cryptographic key. The **aes-256-gcm** algorithm is used with Crypto's [createCipheriv method](https://nodejs.org/api/crypto.html#cryptocreatecipherivalgorithm-key-iv-options), with an initialization vector of 16 random bytes to create a cypher. From the cypher, the cyphertext of the input and an authentication tag are obtained. Before transport, the symmetric key is also encrypted based on this same method, providing the symmetric key as input and the shared secret as the cryptographic key.
+
+The decryption of cyphertext is based on Crypto's [createDecipher method](https://nodejs.org/api/crypto.html#cryptocreatedecipherivalgorithm-key-iv-options). The decryption process is the inverse of the encryption process, requiring the cyphertext, symmetric key, and the cypher's initialization vector and authentication tag be used to decrypt the cyphertext.
+
+### Transport
+For transport, the cyphertext, encrypted symmetric key, and the associated authentication tags and initialization vectors of each need to be communicated. To accomplish this, all items are joined by `:` into a single string, and a buffer of this joined string is taken and encoded to base64. This base64 string is used for transport, and is provided alongside a private key and public key for decryption (e.g.. the public key of the sender and the private key of the recipient).
