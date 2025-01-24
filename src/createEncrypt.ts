@@ -1,7 +1,7 @@
-import { createCyphertext, type cyphertextObject } from "./encryption/createCyphertext.ts";
+import { createCyphertext, type CyphertextObject } from "./encryption/createCyphertext.ts";
 import { getSharedSecret } from "./encryption/utils/getSharedSecret.ts";
-import { encryptSymmetricKey, type encryptedKeyObject } from "./encryption/encryptSymmetricKey.ts";
-import { base64 } from "jsr:@scure/base";
+import { encryptSymmetricKey, type EncryptedKeyObject } from "./encryption/encryptSymmetricKey.ts";
+import { base64 } from "jsr:@scure/base@1.2.4";
 import { Buffer } from "node:buffer";
 
 /**
@@ -17,14 +17,14 @@ export function createEncrypt(inputStr: string, privateKey: string, publicKey: s
     const sharedSecret: Buffer = getSharedSecret(privateKey, recipient);
 
     // Input Encryption
-    const inputEncryption: cyphertextObject = createCyphertext(inputStr, sharedSecret);
+    const inputEncryption: CyphertextObject = createCyphertext(inputStr, sharedSecret);
     const cyphertext: string = inputEncryption.cyphertext;
     const symmetricKey: string = inputEncryption.symmetricKey;
     const inputAuthTag: string = inputEncryption.authTag;
     const inputIV: string = inputEncryption.iv;
 
     // Symmetric key Encryption
-    const symmetricKeyEncryption: encryptedKeyObject = encryptSymmetricKey(symmetricKey, sharedSecret);
+    const symmetricKeyEncryption: EncryptedKeyObject = encryptSymmetricKey(symmetricKey, sharedSecret);
     const encryptedSymmetricKey: string = symmetricKeyEncryption.encryptedSymmetricKey;
     const symmetricKeyAuthTag: string = symmetricKeyEncryption.authTag;
     const symmetricKeyIV:string = symmetricKeyEncryption.iv;

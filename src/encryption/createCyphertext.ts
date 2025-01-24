@@ -3,7 +3,7 @@ import type { CipherGCMTypes, CipherKey, BinaryLike, CipherGCM } from "node:cryp
 import { Buffer } from "node:buffer";
 import { getSymmetricKey } from "./utils/getSymmetricKey.ts";
 
-export type cyphertextObject = {
+export type CyphertextObject = {
     cyphertext: string,
     symmetricKey: string,
     authTag: string,
@@ -15,7 +15,7 @@ export type cyphertextObject = {
  * a symmetric key as the encryption key, and an initialization vector (IV) of 16 {@link randomBytes}. The
  * cyphertext and an authentication tag are derived from the cypher.
  */
-export function createCyphertext(inputStr: string, sharedSecret: Buffer): cyphertextObject {
+export function createCyphertext(inputStr: string, sharedSecret: Buffer): CyphertextObject {
     const algorithm: CipherGCMTypes = 'aes-256-gcm';
     const key: CipherKey = getSymmetricKey(sharedSecret);
     const iv: BinaryLike = randomBytes(16);

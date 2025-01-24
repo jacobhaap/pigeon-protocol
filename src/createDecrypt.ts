@@ -1,4 +1,4 @@
-import { base64 } from "jsr:@scure/base";
+import { base64 } from "jsr:@scure/base@1.2.4";
 import { getSharedSecret } from "./encryption/utils/getSharedSecret.ts";
 import { decryptSymmetricKey } from "./decryption/decryptSymmetricKey.ts";
 import { decryptCyphertext } from "./decryption/decryptCyphertext.ts";

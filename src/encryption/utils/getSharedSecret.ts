@@ -1,4 +1,4 @@
-import { x25519 } from "jsr:@noble/curves/ed25519";
+import { x25519 } from "jsr:@noble/curves@1.8.1/ed25519";
 import { Buffer } from "node:buffer";
 
 /** ECDH key exchange to derive shared secret using {@link x25519}. */
