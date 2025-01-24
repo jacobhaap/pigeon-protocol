@@ -1,5 +1,5 @@
 import { createHash, pbkdf2Sync } from "node:crypto"
-import { bip39 } from "jsr:@iacobus/bip39";
+import { bip39 } from "jsr:@iacobus/bip39@2.0.0";
 import type { Buffer } from "node:buffer";
 
 /** Derives a deterministic cryptographic key with {@link pbkdf2Sync} at a key length of 64 bytes. */

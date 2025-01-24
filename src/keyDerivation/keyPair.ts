@@ -1,10 +1,10 @@
-import { bip39 } from "jsr:@iacobus/bip39";
+import { bip39 } from "jsr:@iacobus/bip39@2.0.0";
 import { generateMnemonic } from "./utils/mnemonic.ts";
 import { deriveKey } from "./utils/deriveKey.ts";
-import { x25519 } from "jsr:@noble/curves/ed25519";
+import { x25519 } from "jsr:@noble/curves@1.8.1/ed25519";
 import { Buffer } from "node:buffer";
 
-export type mnemonicKeyPair = {
+export type MnemonicKeyPair = {
     mnemonic: string,
     privateKey: string,
     publicKey: string
@@ -22,7 +22,7 @@ function getPublicKey(privateKey: string): string {
  * with {@link generateMnemonic}. A private key is derived using {@link deriveKey}, and a public key is derived
  * using {@link getPublicKey}.
  */
-export function createKeyPair(providedMnemonic: string | null = null): mnemonicKeyPair {
+export function createKeyPair(providedMnemonic: string | null = null): MnemonicKeyPair {
     let mnemonic: string | null = providedMnemonic;
     let privateKey: string;
     let publicKey: string;

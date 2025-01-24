@@ -1,21 +1,28 @@
 import { createIdentity } from "./createIdentity.ts";
-import type { mnemonicKeyPair } from "./keyDerivation/keyPair.ts";
+import type { MnemonicKeyPair } from "./keyDerivation/keyPair.ts";
 import { createEncrypt } from "./createEncrypt.ts";
 import { createDecrypt } from "./createDecrypt.ts";
 
-export type { mnemonicKeyPair } from "./keyDerivation/keyPair.ts";
+export type { MnemonicKeyPair } from "./keyDerivation/keyPair.ts";
+
+type Identity = {
+    invoke: () => never;
+    new: () => MnemonicKeyPair;
+    regenerate: (mnemonic: string) => MnemonicKeyPair;
+};
+
 
 /** Create a new or regenerate an existing identity using {@link createIdentity}. */
-export const identity = {
+export const identity: Identity = {
     invoke() {
         throw new Error(`'identity' requires a method: 'new' or 'regenerate'`);
     },
     /** Create a new identity. */
-    new(): mnemonicKeyPair {
+    new(): MnemonicKeyPair {
         return createIdentity();
     },
     /** Regenerate an existing identity from a mnemonic phrase. */
-    regenerate(mnemonic: string): mnemonicKeyPair {
+    regenerate(mnemonic: string): MnemonicKeyPair {
         if (!mnemonic) {
             throw new Error(`A 'mnemonic' must be provided to regenerate a key pair.`);
         }
@@ -37,7 +44,7 @@ export function encrypt(inputStr: string, privateKey: string, publicKey: string)
         if (/^([A-Fa-f0-9]{2})+$/.test(privateKey)) {
             senderKey = privateKey;
         } else if (privateKey.split(' ').length === 15) {
-            const senderKeyPair: mnemonicKeyPair = identity.regenerate(privateKey);
+            const senderKeyPair: MnemonicKeyPair = identity.regenerate(privateKey);
             senderKey = senderKeyPair.privateKey;
         } else {
             throw new Error(`Sender 'privateKey' is invalid.`);
@@ -82,7 +89,7 @@ export function decrypt(encrypted: string, publicKey: string, privateKey: string
         if (/^([A-Fa-f0-9]{2})+$/.test(privateKey)) {
             recipientKey = privateKey;
         } else if (privateKey.split(' ').length === 15)  {
-            const recipientKeyPair: mnemonicKeyPair = identity.regenerate(privateKey);
+            const recipientKeyPair: MnemonicKeyPair = identity.regenerate(privateKey);
             recipientKey = recipientKeyPair.privateKey;
         } else {
             throw new Error(`Recipient 'privateKey' is invalid.`);

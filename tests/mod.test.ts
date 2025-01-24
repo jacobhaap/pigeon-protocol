@@ -1,10 +1,10 @@
-import { identity, type mnemonicKeyPair, encrypt, decrypt } from "../src/mod.ts";
+import { identity, type MnemonicKeyPair, encrypt, decrypt } from "../src/mod.ts";
 
 let encryption: string;
 
 Deno.test(`'identity' creates and regenerates mnemonic key pairs`, () => {
-    const newIdent: mnemonicKeyPair = identity.new();
-    const regenIdent: mnemonicKeyPair = identity.regenerate(newIdent.mnemonic);
+    const newIdent: MnemonicKeyPair = identity.new();
+    const regenIdent: MnemonicKeyPair = identity.regenerate(newIdent.mnemonic);
     console.assert(typeof newIdent === 'object' &&
         typeof newIdent.mnemonic === 'string' &&
         typeof newIdent.privateKey === 'string' &&

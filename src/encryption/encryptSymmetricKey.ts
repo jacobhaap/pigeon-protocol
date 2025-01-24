@@ -2,7 +2,7 @@ import { randomBytes, createCipheriv } from "node:crypto";
 import type { CipherGCMTypes, CipherKey, BinaryLike, CipherGCM } from "node:crypto";
 import { Buffer } from "node:buffer";
 
-export type encryptedKeyObject = {
+export type EncryptedKeyObject = {
     encryptedSymmetricKey: string,
     authTag: string,
     iv: string
@@ -13,7 +13,7 @@ export type encryptedKeyObject = {
  * algorithm, a shared secret as the encryption key, and an initialization vector (IV) of 16 {@link randomBytes}.
  * The cyphertext of the symmetric key and an authentication tag are derived from the cypher.
  */
-export function encryptSymmetricKey(symmetricKey: string, sharedSecret: Buffer): encryptedKeyObject {
+export function encryptSymmetricKey(symmetricKey: string, sharedSecret: Buffer): EncryptedKeyObject {
     const algorithm: CipherGCMTypes = 'aes-256-gcm';
     const key: CipherKey = sharedSecret;
     const iv: BinaryLike = randomBytes(16);
